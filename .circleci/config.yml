@@ -1,19 +1,34 @@
 version: 2.1
 orbs:
-    aws-cli: circleci/aws-cli@2.0.10
-    aws-ecs: circleci/aws-ecs@1.9.10
+    aws-cli: circleci/aws-cli@1.0.0
+    aws-ecs: circleci/aws-ecs@1.1.0
     aws-ecr: circleci/aws-ecr@6.8.2
     workflows:
       build-and-deploy:
         jobs:
-          - aws-ecr/build-and-push-image:      
-             -run:  docker build -t 922325212896.dkr.ecr.ap-northeast-1.amazonaws.com/rails:latest 
-                    docker push 922325212896.dkr.ecr.ap-northeast-1.amazonaws.com/rails:latest
+          push-image:
+            working_directory: ~/app
+            docker:
+              - image: circleci/ruby:2.5.1
+            steps:
+              - checkout
+              - setup_remote_docker
 
-          - aws-ecs/deploy-service-update:
-              requires:
-                - aws-ecr/build-and-push-image
-                  family: '${MY_APP_PREFIX}-service'
-                  cluster-name: '${MY_APP_PREFIX}-cluster'
-                  container-image-name-updates: 'container=${MY_APP_PREFIX}-service,tag=${CIRCLE_SHA1}'
-    
+              #app
+              - aws-ecr/build-and-push-image:
+                  repo: my-app/app
+              #nginx
+              - aws-ecr/build-and-push-image:
+                  docker: ./docker/containers/nginx/Dockerfile
+                  repo: nginx
+  jobs:
+    run-task:
+      steps:
+        - aws-ecs/run-task:
+            cluster: demo-club
+            task-definition: demo
+            launch-type: EC2
+            overrides:  {\\\"containerOverrides": [ { \\\"name" : \\\"rails" , \\\"command" : [ \\\"rails" , \\\"db:migrate" ] , } ] }
+    run-task:
+      jobs:
+        - run-task
