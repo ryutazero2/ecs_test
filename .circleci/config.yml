@@ -44,10 +44,10 @@ jobs:
     steps:
       - aws-cli/install
       - aws-cli/setup
+      - run: sudo apt-get update && sudo apt-get install -yy less
       - aws-ecs/run-task:
           cluster: demo-club
           task-definition: demo
           awsvpc: false
           launch-type: EC2
-          
           overrides: "{ \\\"containerOverrides\\\": [ { \\\"name\\\" : \\\"rails\\\" , \\\"command\\\" : [ \\\"rails\\\" , \\\"db:migrate\\\" ] } ] }"
