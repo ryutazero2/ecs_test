@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   aws-ecs: circleci/aws-ecs@1.1.0
   aws-ecr: circleci/aws-ecr@6.8.2
-  aws-cli: circleci/aws-cli@1.0.0
+  aws-cli: circleci/aws-cli@0.1.13
 
 workflows:
   version: 2
@@ -43,8 +43,7 @@ jobs:
       - image: 'circleci/python:3.7.1'
     steps:
       - aws-cli/install
-      - aws-cli/setup
-      - run: export AWS_PAGER=""
+      - aws-cli/configure
       - aws-ecs/run-task:
           cluster: demo-club
           task-definition: demo
