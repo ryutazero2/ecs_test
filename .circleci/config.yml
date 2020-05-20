@@ -47,5 +47,7 @@ jobs:
       - aws-ecs/run-task:
           cluster: demo-club
           task-definition: demo
+          awsvpc: false
           launch-type: EC2
+          
           overrides: "{ \\\"containerOverrides\\\": [ { \\\"name\\\" : \\\"rails\\\" , \\\"command\\\" : [ \\\"rails\\\" , \\\"db:migrate\\\" ] } ] }"
