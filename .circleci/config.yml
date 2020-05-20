@@ -34,8 +34,7 @@ jobs:
           repo: rails
       #nginx
       - aws-ecr/build-and-push-image:
-          path: containers/nginx
-          dockerfile: containers/nginx/Dockerfile
+          path: containers/nginx   
           repo: nginx
 
   migrate:
