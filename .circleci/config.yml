@@ -44,7 +44,7 @@ jobs:
     steps:
       - aws-cli/install
       - aws-cli/setup
-      - run: sudo apt-get update && sudo apt-get install -yy less
+      - run: export AWS_PAGER=""
       - aws-ecs/run-task:
           cluster: demo-club
           task-definition: demo
