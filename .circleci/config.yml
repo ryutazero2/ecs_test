@@ -35,7 +35,7 @@ jobs:
       #nginx
       - aws-ecr/build-and-push-image:
           path: containers/nginx   
-          repo: nginx
+          repo: web
 
   migrate:
     docker:
